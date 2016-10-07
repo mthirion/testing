@@ -35,14 +35,14 @@ The command line overrides the configuration in the code <br>
 
 The command line arguments are listed both in the MyTestIT class and in the pom.xml
 
-	proxyHost		: browser proxy hostname or IP		; default to 'null'                <br>
+	proxyHost		: browser proxy hostname or IP		; default to 'null'                
 	proxyPort		: browser proxy port				; default to 'null'        
 
-	browser			: browser type (firefox chrome...)	; default to 'phantomjs'           <br>
+	browser			: browser type (firefox chrome...)	; default to 'phantomjs'           
 	phantomjsPath	: phantomjs executable path	                                                   
 
-	version	 	: browser version					; default to '2.1'         <br>
-	serverUrl	: server URL for remote driver		; default to 'localhost'                   <br>
+	version	 	: browser version					; default to '2.1'         
+	serverUrl	: server URL for remote driver		; default to 'localhost'                   
 	platform	: target platform for remote driver	; default to 'linux'
 
 If nothing is configured on the command line, another option is to configure the browser directly with the 'configureBrowser()' method <br>
