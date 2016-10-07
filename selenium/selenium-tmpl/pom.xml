@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~ Copyright (c) 2010-2015 Lazery Attack - http://www.lazeryattack.com 
+	~ http://www.lazerycode.com ~ ~ Licensed under the Apache License, Version 
+	2.0 (the "License"); ~ you may not use this file except in compliance with 
+	the License. ~ You may obtain a copy of the License at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 
+	~ ~ Unless required by applicable law or agreed to in writing, software ~ 
+	distributed under the License is distributed on an "AS IS" BASIS, ~ WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. ~ See the 
+	License for the specific language governing permissions and ~ limitations 
+	under the License. -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<groupId>integration.redhat.org</groupId>
+	<artifactId>selenium</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Selenium Example</name>
+	<description>A Template for Selenium</description>
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<selenium.version>3.0.0-beta4</selenium.version>
+
+		<!-- Selenium plugin -->
+		<overwrite.binaries>false</overwrite.binaries>
+
+		<!-- Maven failsafe plugin -->
+		<threads>1</threads>
+
+
+		<!-- We set the system properties from here This avoid typing all the -Dxxx 
+			while testing System properties list ********************** proxyHost : browser 
+			proxy hostname or IP ; default to 'null' proxyPort : browser proxy port ; 
+			default to 'null' browser : browser type (firefox chrome...) ; default to 
+			'hantomjs' version : browser version ; default to '2.1' serverUrl : server 
+			URL for remote driver ; default to 'localhost' platform : target platform 
+			for remote driver ; default to 'linux' 
+			phantomjsPath	: phantomjs executable path	
+		-->
+
+		<proxyHost></proxyHost>
+		<proxyPort></proxyPort>
+		<browser>phantomjs</browser>
+		<version>2.1</version>
+		<serverUrl></serverUrl>
+		<platform>linux</platform>
+		<version></version>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.github.detro.ghostdriver</groupId> -->
+<!-- 			<artifactId>phantomjsdriver</artifactId> -->
+<!-- 			<version>2.1.1</version> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+			<exclusions>
+			<exclusion>
+			<groupId>com.github.detro.ghostdriver</groupId>
+			<artifactId>phantomjsdriver</artifactId>
+			</exclusion>
+			</exclusions>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.codeborne</groupId> -->
+<!-- 			<artifactId>phantomjsdriver</artifactId> -->
+<!-- 			<version>1.3.0</version> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.9.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>selenium</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>1.6</source>
+							<target>1.6</target>
+						</configuration>
+						<version>3.5.1</version>
+					</plugin>
+
+					<plugin>
+						<!-- This plugin is used to download the WebDrivers at runtime The 
+							plugin reads the RepositoryMap.xml and download the drivers binaries for 
+							all os/version/bitrate listed -->
+						<groupId>com.lazerycode.selenium</groupId>
+						<artifactId>driver-binary-downloader-maven-plugin</artifactId>
+						<version>1.0.11</version>
+						<configuration>
+							<!-- directory for the web drivers binaries -->
+							<rootStandaloneServerDirectory>${project.basedir}/src/test/resources/drivers_bin</rootStandaloneServerDirectory>
+
+							<!-- Storage location for downloaded zips -->
+							<downloadedZipFileDirectory>${project.basedir}/src/test/resources/drivers_zips</downloadedZipFileDirectory>
+
+							<!-- repositoryMap location, when not default -->
+							<customRepositoryMap>${project.basedir}/src/test/resources/RepositoryMap.xml</customRepositoryMap>
+
+							<overwriteFilesThatExist>${overwrite.binaries}</overwriteFilesThatExist>
+							<onlyGetDriversForHostOperatingSystem>true</onlyGetDriversForHostOperatingSystem>
+
+							<!-- <operatingSystems> <windows>true</windows> <linux>true</linux> 
+								<mac>true</mac> </operatingSystems> -->
+
+							<thirtyTwoBitBinaries>false</thirtyTwoBitBinaries>
+							<sixtyFourBitBinaries>true</sixtyFourBitBinaries>
+							<onlyGetLatestVersions>false</onlyGetLatestVersions>
+
+							<!-- <getSpecificExecutableVersions> <googlechrome>18</googlechrome> 
+								</getSpecificExecutableVersions> <throwExceptionIfSpecifiedVersionIsNotFound>false</throwExceptionIfSpecifiedVersionIsNotFound> 
+								<fileDownloadRetryAttempts>2</fileDownloadRetryAttempts> <fileDownloadConnectTimeout>20000</fileDownloadConnectTimeout> 
+								<fileDownloadReadTimeout>10000</fileDownloadReadTimeout> <checkFileHashes>true</checkFileHashes> 
+								<useSystemProxy>true</useSystemProxy> -->
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>selenium</goal>
+								</goals>	
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<!-- <plugin> -->
+					<!-- <groupId>org.apache.maven.plugins</groupId> -->
+					<!-- <artifactId>maven-surefire-plugin</artifactId> -->
+					<!-- <version>2.18.1</version> -->
+					<!-- <configuration> -->
+					<!-- <suiteXmlFiles> -->
+					<!-- TestNG suite XML files -->
+					<!-- <suiteXmlFile>testng.xml</suiteXmlFile> -->
+					<!-- </suiteXmlFiles> -->
+					<!-- <parallel>methods</parallel> -->
+					<!-- <threadCount>${threads}</threadCount> -->
+					<!-- <groups>functest,perftest</groups> -->
+					<!-- <systemPropertyVariables> -->
+					<!-- <propertyName>firefox</propertyName> -->
+					<!-- </systemPropertyVariables> -->
+					<!-- </configuration> -->
+					<!-- </plugin> -->
+
+
+
+					<!-- The maven failsafe plugin is used for integration testing It's 
+						an equivalent to the surefire plugin It has 2 goals: - integration-tests 
+						- verify They integrates with the 4 maven phases: - pre-integration-test 
+						- integration-test - post-integration-test - verify The integration-test 
+						phase never stops the build to ensure the post-integration-test phase is 
+						run So, it's better to always use the verify phase -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.19.1</version>
+						<configuration>
+							<!-- run tests in paralle options are: methods, classes, both, suites, 
+								suitesAndClasses, suitesAndMethods, classesAndMethods or all. -->
+							<parallel>methods</parallel>
+							<threadCount>${threads}</threadCount>
+
+
+							<!-- The plugin is very generic It only sets system variables to be 
+								used by the application (here Selenium tests) -->
+							<systemPropertyVariables>
+								<browser>${browser}</browser>
+								<proxyHost>${proxyHost}</proxyHost>
+								<proxyPort>${proxyPort}</proxyPort>
+								<version>${version}</version>
+								<serverUrl>${serverUrl}</serverUrl>
+								<platform>${platform}</platform>
+
+								<!--Set properties passed in by the driver binary downloader -->
+								<phantomjs.binary.path>${phantomjs.binary.path}</phantomjs.binary.path>
+								<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
+								<webdriver.ie.driver>${webdriver.ie.driver}</webdriver.ie.driver>
+								<webdriver.opera.driver>${webdriver.opera.driver}</webdriver.opera.driver>
+								<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver>
+								<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver>
+							</systemPropertyVariables>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.lazerycode.selenium
+										</groupId>
+										<artifactId>
+											driver-binary-downloader-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0.11,)
+										</versionRange>
+										<goals>
+											<goal>selenium</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
