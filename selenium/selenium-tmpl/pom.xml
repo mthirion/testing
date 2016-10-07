@@ -117,10 +117,10 @@
 						<version>1.0.11</version>
 						<configuration>
 							<!-- directory for the web drivers binaries -->
-							<rootStandaloneServerDirectory>${project.basedir}/src/test/resources/drivers_bin</rootStandaloneServerDirectory>
+							<rootStandaloneServerDirectory>${project.basedir}/target/drivers/drivers_bin</rootStandaloneServerDirectory>
 
 							<!-- Storage location for downloaded zips -->
-							<downloadedZipFileDirectory>${project.basedir}/src/test/resources/drivers_zips</downloadedZipFileDirectory>
+							<downloadedZipFileDirectory>${project.basedir}/target/drivers/drivers_zips</downloadedZipFileDirectory>
 
 							<!-- repositoryMap location, when not default -->
 							<customRepositoryMap>${project.basedir}/src/test/resources/RepositoryMap.xml</customRepositoryMap>
